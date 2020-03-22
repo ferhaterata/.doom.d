@@ -67,19 +67,19 @@ T - tag prefix
 ;;;###autoload
 (defhydra hydra-pdftools (:color blue :hint nil)
         "
-                                                                        ╭───────────┐
-      Move  History   Scale/Fit     Annotations   Search/Link    Do    │ PDF Tools │
-  ╭────────────────────────────────────────────────────────────────────┴───────────╯
-       ^^_gg_^^      _B_    ^↧^    _+_    ^ ^     [_al_] list      [_s_] search    [_u_] revert buffer
-        ^^^↑^^^      ^↑^    _H_    ^↑^  ↦ _W_ ↤   [_am_] markup    [_o_] outline   [_i_] info
-        ^^_k_^^      ^ ^    ^↥^    _0_    ^ ^     [_at_] text      [_F_] link      [_d_] dark mode
-        ^^^↑^^^      ^↓^  ╭─^─^─┐  ^↓^  ╭─^ ^─┐   [_ah_] highlight [_f_] search l. [_n_] night mode
-   _h_ ←pag_e_→ _l_  _N_  │ _P_ │  _-_    _b_     [_au_] underline [_y_] yank
-        ^^^↓^^^      ^ ^  ╰─^─^─╯  ^ ^  ╰─^ ^─╯   [_as_] squiggly  [_<ESC>_] quit
-        ^^_j_^^      ^ ^  _m_ouse slice       [_ad_] delete
-        ^^^↓^^^      ^ ^  _r_eset slice box   [_aa_] dired
-        ^^_G_^^
-  --------------------------------------------------------------------------------
+                                                                      ╭───────────┐
+     Move  History   Scale/Fit     Annotations   Search/Link    Do    │ PDF Tools │
+ ╭────────────────────────────────────────────────────────────────────┴───────────╯
+      ^^_gg_^^      _B_    ^↧^    _+_    ^ ^     [_al_] list      [_s_] search    [_u_] revert buffer
+       ^^^↑^^^      ^↑^    _H_    ^↑^  ↦ _W_ ↤   [_am_] markup    [_o_] outline   [_i_] info
+       ^^_k_^^      ^ ^    ^↥^    _0_    ^ ^     [_at_] text      [_F_] link      [_d_] dark mode
+       ^^^↑^^^      ^↓^  ╭─^─^─┐  ^↓^  ╭─^ ^─┐   [_ah_] highlight [_f_] search l. [_n_] night mode
+  _h_ ←pag_e_→ _l_  _N_  │ _P_ │  _-_    _b_     [_au_] underline [_y_] yank
+       ^^^↓^^^      ^ ^  ╰─^─^─╯  ^ ^  ╰─^ ^─╯   [_as_] squiggly  [_<ESC>_] quit
+       ^^_j_^^      ^ ^  _m_ouse slice       [_ad_] delete
+       ^^^↓^^^      ^ ^  _r_eset slice box   [_aa_] dired
+       ^^_G_^^
+ ─────────────────────────────────────────────────────────────────────────────────╯
         "
         ("j" evil-collection-pdf-view-next-line-or-next-page :color red)
         ("k" evil-collection-pdf-view-previous-line-or-previous-page :color red)
@@ -123,19 +123,18 @@ T - tag prefix
 ;;;###autoload
 (defhydra hydra-window (:color blue :hint nil)
             "
-                                                                       ╭─────────┐
-     Move to      Size    Scroll        Split                    Do    │ Windows │
-  ╭────────────────────────────────────────────────────────────────────┴─────────╯
-        ^_k_^           ^_K_^       ^_p_^    ╭─┬─┐^ ^        ╭─┬─┐^ ^         ↺ [_u_] undo layout
-        ^^↑^^           ^^↑^^       ^^↑^^    │ │ │_v_ertical ├─┼─┤_b_alance   ↻ [_r_] restore layout
-    _h_ ←   → _l_   _H_ ←   → _L_   ^^ ^^    ╰─┴─╯^ ^        ╰─┴─╯^ ^         ✗ [_d_] close window
-        ^^↓^^           ^^↓^^       ^^↓^^    ╭───┐^ ^        ╭───┐^ ^         ⇋ [_w_] cycle window
-        ^_j_^           ^_J_^       ^_n_^    ├───┤_s_tack    │   │_z_oom
-        ^^ ^^           ^^ ^^       ^^ ^^    ╰───╯^ ^        ╰───╯^ ^
-  --------------------------------------------------------------------------------
+                                                                      ╭─────────┐
+    Move to      Size    Scroll        Split                   Do     │ Windows │
+ ╭────────────────────────────────────────────────────────────────────┴─────────╯
+       ^_k_^           ^_K_^       ^_p_^    ╭─┬─┐^ ^        ╭─┬─┐^ ^         ↺ [_u_] undo layout
+       ^^↑^^           ^^↑^^       ^^↑^^    │ │ │_v_ertical ├─┼─┤_b_alance   ↻ [_r_] restore layout
+   _h_ ←   → _l_   _H_ ←   → _L_   ^^ ^^    ╰─┴─╯^ ^        ╰─┴─╯^ ^         ✗ [_d_] close window
+       ^^↓^^           ^^↓^^       ^^↓^^    ╭───┐^ ^        ╭───┐^ ^         ⇋ [_w_] cycle window
+       ^_j_^           ^_J_^       ^_n_^    ├───┤_s_tack    │   │_z_oom        [_<ESC>_] quit
+       ^^ ^^           ^^ ^^       ^^ ^^    ╰───╯^ ^        ╰───╯^ ^
+ ───────────────────────────────────────────────────────────────────────────────╯
             "
-            ("<tab>" hydra-master/body "back")
-            ("<ESC>" nil "quit")
+            ("<ESC>" "quit")
             ("n" joe-scroll-other-window :color red)
             ("p" joe-scroll-other-window-down :color red)
             ("b" balance-windows)
@@ -154,3 +153,29 @@ T - tag prefix
             ("v" split-window-horizontally :color red)
             ("w" other-window)
             ("z" delete-other-windows))
+
+(define-key dired-mode-map "." 'my/hydra-dired/body)
+
+;; Avy hydra
+;;;###autoload
+(defhydra my/hydra-avy (:exit t :hint nil)
+  "
+                                                ╭───────┐
+    Line      Region      Goto                  │  Avy  │
+ ╭──────────────────────────────────────────────┴───────╯
+   [_y_] yank   [_Y_] yank   [_c_] timed char  [_C_] char
+   [_m_] move   [_M_] move   [_w_] word        [_W_] any word
+   [_k_] kill   [_K_] kill   [_l_] line        [_L_] end of line
+ ───────────────────────────────────────────────────────╯"
+  ("c" avy-goto-char-timer)
+  ("C" avy-goto-char)
+  ("w" avy-goto-word-1)
+  ("W" avy-goto-word-0)
+  ("l" avy-goto-line)
+  ("L" avy-goto-end-of-line)
+  ("m" avy-move-line)
+  ("M" avy-move-region)
+  ("k" avy-kill-whole-line)
+  ("K" avy-kill-region)
+  ("y" avy-copy-line)
+  ("Y" avy-copy-region))

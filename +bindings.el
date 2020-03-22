@@ -18,6 +18,7 @@
 
 (map! :leader (:prefix ("w" . "window") "~" #'resize-window-hydra/body))
 (map! :leader (:prefix ("m" . "localleader") "w" #'hydra-window/body))
+(map! :desc "Avy Hydra" :leader (:prefix ("m" . "localleader") "a" #'my/hydra-avy/body))
 
 (map!
  (:map pdf-view-mode-map :localleader
