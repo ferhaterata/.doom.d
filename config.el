@@ -125,6 +125,12 @@
   'company-capf
   '(company-yasnippet company-dict))
 
+;; -----------------------------------------------------------------------------
+(set-company-backend! '(text-mode markdown-mode gfm-mode)
+  '(:seperate company-ispell company-files company-yasnippet))
+
+;;(setq ispell-dictionary "en_us-custom")
+;;(setq company-ispell-dictionary "en_us-custom")
 
 ;; ----------------------------------------------------------------------------------
 (load! "+bindings")
@@ -165,3 +171,50 @@
                         (frame-parameter nil 'fullscreen))))
 
 (add-hook 'kill-emacs-hook #'save-frame-dimensions)
+
+;; -----------------------------------------------------------------------------
+;; sml-mode
+(use-package! sml-mode
+  :mode '("\\.\\(sml\\|sig\\)\\'" . sml-mode)
+  :defer t
+  :commands run-sml
+  :init (autoload 'run-sml "sml-proc" "Run an inferior SML process." t)
+  :config
+  (progn
+    (defun my/sml-prog-proc-send-buffer-and-focus ()
+      "Send buffer to REPL and switch to it in `insert state'."
+      (interactive)
+      (sml-prog-proc-send-buffer t)
+      (evil-insert-state))
+
+    (defun my/sml-prog-proc-send-region-and-focus (start end)
+      "Send region to REPL and switch to it in `insert state'."
+      (interactive "r")
+      (sml-prog-proc-send-region start end t)
+      (evil-insert-state))
+
+    (defun my/sml-send-function-and-focus ()
+      "Send function at point to REPL and switch to it in `insert state'."
+      (interactive)
+      (sml-send-function t)
+      (evil-insert-state))
+
+    (define-key sml-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+    (define-key sml-mode-map (kbd "M-SPC") 'sml-electric-space)
+    (define-key sml-mode-map (kbd "|") 'sml-electric-pipe)))
+
+(with-eval-after-load 'smartparens
+  ;; don't auto-close apostrophes (type 'a = foo) and backticks (`Foo)
+  (sp-local-pair 'sml-mode "'" nil :actions nil)
+  (sp-local-pair 'sml-mode "`" nil :actions nil))
+
+(use-package! company-mlton
+  :defer t
+  :config
+  (add-hook! 'sml-mode-hook #'company-mlton-init))
+
+;; -----------------------------------------------------------------------------
+;; At one point, typing became noticably laggy, Profiling revealed flyspell-post
+;; -command-hook was responsible for 47% of CPU cycles by itself! So I’m going
+;; to make use of flyspell-lazy
+;;(after! flyspell (require 'flyspell-lazy) (flyspell-lazy-mode 1))
