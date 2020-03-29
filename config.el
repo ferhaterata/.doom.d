@@ -27,6 +27,8 @@
 ;; `load-theme' function. This is the default:
 ;;(setq doom-theme 'doom-one)
 (setq doom-theme 'doom-tomorrow-night)
+;; default is doom-atom
+(setq doom-themes-treemacs-theme "doom-colors") ;use the colorful treemacs theme
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -34,7 +36,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type 'visual)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -53,17 +55,15 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
-(use-package! centaur-tabs
-  :config
+(after! centaur-tabs
   (setq centaur-tabs-height 60
         centaur-tabs-set-bar 'under
         x-underline-at-descent-line t)
   (centaur-tabs-mode t)
 )
 
-;;(setq +doom-dashboard-banner-dir
-;;      (concat doom-private-dir "banners/"))
-;;(setq +doom-dashboard-banner-padding '(4 . 10))
+(setq fancy-splash-image "~/.doom.d/banners/default.svg")
+;(setq +doom-dashboard-banner-padding '(4 . 10))
 
 ;;(after! doom-modeline
 ;;  (setq doom-modeline-major-mode-color-icon t))
@@ -95,7 +95,7 @@
  (if (featurep 'xemacs) (kbd "<C-iso-left-tab>") (kbd "<C-S-iso-lefttab>"))
     'centaur-tabs-backward)
 
-;; ----------------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 ;; doom-modeline
 (after! doom-modeline
   (display-battery-mode +1)
@@ -103,23 +103,30 @@
   (setq display-time-default-load-average nil)
   (display-time-mode +1))
 
+;; -----------------------------------------------------------------------------
+;; Defaults
+;; (setq-default delete-by-moving-to-trash t) ; Delete files to trash
 ;; (blink-cursor-mode t)
-;; ----------------------------------------------------------------------------------
+(delete-selection-mode 1) ; Replace selection when inserting text
+(global-subword-mode 1)   ; Iterate through CamelCase words
+
+;; -----------------------------------------------------------------------------
 ;; custom-mode
 (use-package! alloy-mode)
 (use-package! smtlib-mode)
 
-;; ----------------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 (setq +pretty-code-enabled-modes
       (if IS-LINUX '(emacs-lisp-mode haskell-mode python-mode) nil))
-
-;; ----------------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
+;; company-mode
 (after! company
+  (setq company-show-numbers t)
   (add-to-list 'company-backends 'company-tabnine))
 
-;; ----------------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 ;; https://github.com/hlissner/doom-emacs/issues/1269
-;; ----------------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 (set-company-backend! '(smtlib-mode alloy-mode)
   '(company-tabnine company-yasnippet company-dabbrev)
   'company-capf
@@ -132,9 +139,10 @@
 ;;(setq ispell-dictionary "en_us-custom")
 ;;(setq company-ispell-dictionary "en_us-custom")
 
-;; ----------------------------------------------------------------------------------
+(setq company-box-doc-enable nil)
+;; -----------------------------------------------------------------------------
 (load! "+bindings")
-;; ----------------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 
 (use-package! dired-sidebar
   :commands (dired-sidebar-toggle-sidebar)
@@ -144,14 +152,14 @@
               (unless (file-remote-p default-directory)
                 (auto-revert-mode))))
   (map! :leader (:prefix ("o" . "open") "~" #'dired-sidebar-toggle-sidebar))
-  ;;(add-hook 'dired-sidebar-mode-hook (lambda () (all-the-icons-dired-mode -1)))
+;;(add-hook 'dired-sidebar-mode-hook (lambda () (all-the-icons-dired-mode -1)))
   :config
   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t))
 
-;; ----------------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 ;; add to ~/.doom.d/config.el
 (when-let (dims (doom-cache-get 'last-frame-size))
   (cl-destructuring-bind ((left . top) width height fullscreen) dims
@@ -174,8 +182,11 @@
 
 ;; -----------------------------------------------------------------------------
 ;; sml-mode
+;; (require 'company-mlton)
+;; (add-hook 'sml-mode-hook #'company-mlton-init)
+
 (use-package! sml-mode
-  :mode '("\\.\\(sml\\|sig\\)\\'" . sml-mode)
+  :mode "\\.\\(sml\\|sig\\)\\'"
   :defer t
   :commands run-sml
   :init (autoload 'run-sml "sml-proc" "Run an inferior SML process." t)
@@ -201,7 +212,9 @@
 
     (define-key sml-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
     (define-key sml-mode-map (kbd "M-SPC") 'sml-electric-space)
-    (define-key sml-mode-map (kbd "|") 'sml-electric-pipe)))
+    (define-key sml-mode-map (kbd "|") 'sml-electric-pipe))
+
+  )
 
 (with-eval-after-load 'smartparens
   ;; don't auto-close apostrophes (type 'a = foo) and backticks (`Foo)
@@ -209,12 +222,35 @@
   (sp-local-pair 'sml-mode "`" nil :actions nil))
 
 (use-package! company-mlton
-  :defer t
+  :after sml-mode
   :config
-  (add-hook! 'sml-mode-hook #'company-mlton-init))
+  (add-hook 'sml-mode-hook #'company-mlton-init))
+;; (use-package! company-mlton
+;;   :commands (company-mlton-init)
+;;   :after sml-mode
+;;   :config (add-hook 'sml-mode-hook #'company-mlton-init))
 
 ;; -----------------------------------------------------------------------------
 ;; At one point, typing became noticably laggy, Profiling revealed flyspell-post
 ;; -command-hook was responsible for 47% of CPU cycles by itself! So I’m going
 ;; to make use of flyspell-lazy
 ;;(after! flyspell (require 'flyspell-lazy) (flyspell-lazy-mode 1))
+
+;; -----------------------------------------------------------------------------
+;; Proof General
+;;(setq  pdf-view-midnight-colors (quote ("#232333" . "#c7c7c7")))
+;; okular's defaults: light color: #600000 light color: #f0f0f0
+(add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode) ;; me
+;; https://github.com/hlissner/doom-emacs/blob/develop/modules/lang/latex/README.org#changing-the-pdfs-viewer
+(setq +latex-viewers '(pdf-tools))
+
+;; https://www.fbxiang.com/blog/2017/11/01/write_papers_with_org_mode_and_spacemacs.html
+(setq org-latex-pdf-process
+  '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f"))
+
+(use-package! org-ref
+  :after org
+  :init
+  :config
+)
+;; -----------------------------------------------------------------------------

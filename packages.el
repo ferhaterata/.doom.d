@@ -58,3 +58,4 @@
 (package! sml-mode)
 (package! company-mlton :recipe (:host github :repo "MatthewFluet/company-mlton"
                                  :files ("*.el" "*.basis")))
+(package! org-ref)

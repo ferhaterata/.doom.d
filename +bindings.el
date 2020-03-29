@@ -1,7 +1,8 @@
-;;; ~/.doom.d/+bindings.el -*- lexical-binding: t; -*- 
+;;; ~/.doom.d/+bindings.el -*- lexical-binding: t; -*-
 
-;; ----------------------------------------------------------------------------------
-;; You can also find out what's bound to a key sequence with SPC h k <keysequence> or C-h k <keysequence>.
+;; -----------------------------------------------------------------------------
+;; You can also find out what's bound to a key sequence with
+;; SPC h k <keysequence> or C-h k <keysequence>.
 ;; https://github.com/hlissner/doom-emacs/issues/1801
 ;; https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/+evil-bindings.el
 ;;
@@ -18,7 +19,8 @@
 
 (map! :leader (:prefix ("w" . "window") "~" #'resize-window-hydra/body))
 (map! :leader (:prefix ("m" . "localleader") "w" #'hydra-window/body))
-(map! :desc "Avy Hydra" :leader (:prefix ("m" . "localleader") "a" #'my/hydra-avy/body))
+(map! :desc "Avy Hydra"
+      :leader (:prefix ("m" . "localleader") "a" #'my/hydra-avy/body))
 
 (map!
  (:map pdf-view-mode-map :localleader
