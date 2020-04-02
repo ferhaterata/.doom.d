@@ -133,32 +133,15 @@
   '(company-yasnippet company-dict))
 
 ;; -----------------------------------------------------------------------------
+;; spelling
 (set-company-backend! '(text-mode markdown-mode gfm-mode)
   '(:seperate company-ispell company-files company-yasnippet))
 
-;;(setq ispell-dictionary "en_us-custom")
-;;(setq company-ispell-dictionary "en_us-custom")
+(setq company-ispell-dictionary (file-truename "~/Dropbox/KDE/english-words.txt"))
 
-(setq company-box-doc-enable nil)
+;;(setq company-box-doc-enable nil)
 ;; -----------------------------------------------------------------------------
 (load! "+bindings")
-;; -----------------------------------------------------------------------------
-
-(use-package! dired-sidebar
-  :commands (dired-sidebar-toggle-sidebar)
-  :init
-  (add-hook 'dired-sidebar-mode-hook
-            (lambda ()
-              (unless (file-remote-p default-directory)
-                (auto-revert-mode))))
-  (map! :leader (:prefix ("o" . "open") "~" #'dired-sidebar-toggle-sidebar))
-;;(add-hook 'dired-sidebar-mode-hook (lambda () (all-the-icons-dired-mode -1)))
-  :config
-  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
-  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
-  (setq dired-sidebar-use-term-integration t)
-  (setq dired-sidebar-use-custom-font t))
-
 ;; -----------------------------------------------------------------------------
 ;; add to ~/.doom.d/config.el
 (when-let (dims (doom-cache-get 'last-frame-size))
@@ -179,56 +162,6 @@
                         (frame-parameter nil 'fullscreen))))
 
 (add-hook 'kill-emacs-hook #'save-frame-dimensions)
-
-;; -----------------------------------------------------------------------------
-;; sml-mode
-;; (require 'company-mlton)
-;; (add-hook 'sml-mode-hook #'company-mlton-init)
-
-(use-package! sml-mode
-  :mode "\\.\\(sml\\|sig\\)\\'"
-  :defer t
-  :commands run-sml
-  :init (autoload 'run-sml "sml-proc" "Run an inferior SML process." t)
-  :config
-  (progn
-    (defun my/sml-prog-proc-send-buffer-and-focus ()
-      "Send buffer to REPL and switch to it in `insert state'."
-      (interactive)
-      (sml-prog-proc-send-buffer t)
-      (evil-insert-state))
-
-    (defun my/sml-prog-proc-send-region-and-focus (start end)
-      "Send region to REPL and switch to it in `insert state'."
-      (interactive "r")
-      (sml-prog-proc-send-region start end t)
-      (evil-insert-state))
-
-    (defun my/sml-send-function-and-focus ()
-      "Send function at point to REPL and switch to it in `insert state'."
-      (interactive)
-      (sml-send-function t)
-      (evil-insert-state))
-
-    (define-key sml-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
-    (define-key sml-mode-map (kbd "M-SPC") 'sml-electric-space)
-    (define-key sml-mode-map (kbd "|") 'sml-electric-pipe))
-
-  )
-
-(with-eval-after-load 'smartparens
-  ;; don't auto-close apostrophes (type 'a = foo) and backticks (`Foo)
-  (sp-local-pair 'sml-mode "'" nil :actions nil)
-  (sp-local-pair 'sml-mode "`" nil :actions nil))
-
-(use-package! company-mlton
-  :after sml-mode
-  :config
-  (add-hook 'sml-mode-hook #'company-mlton-init))
-;; (use-package! company-mlton
-;;   :commands (company-mlton-init)
-;;   :after sml-mode
-;;   :config (add-hook 'sml-mode-hook #'company-mlton-init))
 
 ;; -----------------------------------------------------------------------------
 ;; At one point, typing became noticably laggy, Profiling revealed flyspell-post

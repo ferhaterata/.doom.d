@@ -54,8 +54,4 @@
 (package! company-tabnine)
 (package! smtlib-mode :recipe (:host github :repo "ModelWriter/smtlib-mode"))
 (package! alloy-mode :recipe (:host github :repo "ModelWriter/alloy-mode"))
-(package! dired-sidebar)
-(package! sml-mode)
-(package! company-mlton :recipe (:host github :repo "MatthewFluet/company-mlton"
-                                 :files ("*.el" "*.basis")))
 (package! org-ref)

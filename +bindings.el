@@ -1,5 +1,6 @@
 ;;; ~/.doom.d/+bindings.el -*- lexical-binding: t; -*-
 
+;; https://noelwelsh.com/posts/2019-01-10-doom-emacs.html
 ;; -----------------------------------------------------------------------------
 ;; You can also find out what's bound to a key sequence with
 ;; SPC h k <keysequence> or C-h k <keysequence>.
@@ -38,15 +39,22 @@
    "b" #'pdf-view-set-slice-from-bounding-box
    "r" #'pdf-view-reset-slice))
 
+;; (map!
+;;  (:map sml-mode-map
+;;    :desc "SML Mode" :localleader "'"  #'run-sml
+;;    :prefix ("s" . "sml") (
+;;    :desc "Run buffer"                  "b" #'sml-prog-proc-send-buffer
+;;    :desc "Run buffer and Focus"        "B" #'my/sml-prog-proc-send-buffer-and-focus
+;;    :desc "Run the paragraph"           "f" #'sml-send-function
+;;    :desc "Run the paragraph and focus" "F" #'my/sml-send-function-and-focus
+;;    :desc "Run sml"                     "i" #'run-sml
+;;    :desc "Run region"                  "r" #'sml-prog-proc-send-region
+;;    :desc "Run region and focus"        "R" #'my/sml-prog-proc-send-region-and-focus
+;;    :desc "Run buffer"                  "s" #'run-sml)))
+
 (map!
- (:map sml-mode-map
-   :desc "SML Mode" :localleader "'"  #'run-sml
-   :prefix ("s" . "sml") (
-   :desc "Run buffer"                  "b" #'sml-prog-proc-send-buffer
-   :desc "Run buffer and Focus"        "B" #'my/sml-prog-proc-send-buffer-and-focus
-   :desc "Run the paragraph"           "f" #'sml-send-function
-   :desc "Run the paragraph and focus" "F" #'my/sml-send-function-and-focus
-   :desc "Run sml"                     "i" #'run-sml
-   :desc "Run region"                  "r" #'sml-prog-proc-send-region
-   :desc "Run region and focus"        "R" #'my/sml-prog-proc-send-region-and-focus
-   :desc "Run buffer"                  "s" #'run-sml)))
+ (:leader
+    (:prefix "o"
+      :desc "Undo tree visualize"      :n "u" #'undo-tree-visualize))
+)
+
