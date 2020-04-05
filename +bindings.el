@@ -8,7 +8,9 @@
 ;; https://github.com/hlissner/doom-emacs/blob/develop/modules/config/default/+evil-bindings.el
 ;;
 (map! :after dired ; binds these after the dired package has loaded
-  (:map dired-mode-map :desc "Dired Hydra" :n "." #'hydra-dired/body))
+  (:map dired-mode-map :desc "Dired Hydra" :n "." #'hydra-dired/body)
+  (:map dired-mode-map :n "l" #'dired-find-file)
+  (:map dired-mode-map :n "h" #'dired-up-directory))
 
 (map!
  (:map dired-mode-map
