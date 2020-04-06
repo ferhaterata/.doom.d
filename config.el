@@ -65,10 +65,6 @@
 (setq fancy-splash-image "~/.doom.d/banners/default.svg")
 ;(setq +doom-dashboard-banner-padding '(4 . 10))
 
-;;(after! doom-modeline
-;;  (setq doom-modeline-major-mode-color-icon t))
-
-(setq expand-region-contract-fast-key "C-v")
 (use-package! expand-region
   :commands (er/contract-region er/mark-symbol er/mark-word)
   :init
@@ -80,6 +76,8 @@
         )
 
   :config
+ ;; (setq expand-region-contract-fast-key "C-v")
+  (setq expand-region-contract-fast-key "V")
   (defadvice! doom--quit-expand-region-a ()
     "Properly abort an expand-region."
     :before '(evil-escape doom/escape)
@@ -87,7 +85,10 @@
       (er/contract-region 0)))
   )
 
-(map! "C-s" #'save-buffer)
+;;(map! "C-s" #'save-buffer)
+;; `g-s-SPC' (all windows) and `g-s-/' (current window).
+(map! "C-s" #'evil-avy-goto-char-timer)
+;; `C-S' gives Search candidates with helm/ivy at company completion
 (map! "C-q" (lambda! () (interactive) (kill-this-buffer))) ;; Kill buffer
 
 (map! :n [C-tab] (lambda () (interactive) (centaur-tabs-forward)))

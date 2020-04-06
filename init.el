@@ -199,3 +199,6 @@
        :config
        ;;literate
        (default +bindings +smartparens))
+;; Evil needs some settings earlier than config.el
+;; Work on visual lines instead of real lines (e.g. j/k are gj/gk)
+(setq evil-respect-visual-line-mode t)
