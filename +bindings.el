@@ -82,4 +82,11 @@
       :desc "Group tabs by buffer"   "t"      #'centaur-tabs-group-buffer-groups)
  )
 )
-
+;; -----------------------------------------------------------------------------
+;; (map!
+;;  (:after ivy
+;;    (:map ivy-minibuffer-map
+;;      [return] #'ivy-alt-done
+;;      "RET"    #'ivy-alt-done
+;;      [tab]    #'+ivy-partial-or-complete
+;;      "TAB"    #'+ivy-partial-or-complete)))

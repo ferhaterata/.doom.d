@@ -55,3 +55,4 @@
 (package! smtlib-mode :recipe (:host github :repo "ModelWriter/smtlib-mode"))
 (package! alloy-mode :recipe (:host github :repo "ModelWriter/alloy-mode"))
 (package! org-ref)
+;; (package! dired-subtree)

@@ -55,6 +55,9 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
+(setq fancy-splash-image "~/.doom.d/banners/default.svg")
+;(setq +doom-dashboard-banner-padding '(4 . 10))
+
 (after! centaur-tabs
   (setq centaur-tabs-height 60
         centaur-tabs-set-bar 'under
@@ -104,9 +107,6 @@
           (centaur-tabs-get-group-name (current-buffer))))))
 
 )
-
-(setq fancy-splash-image "~/.doom.d/banners/default.svg")
-;(setq +doom-dashboard-banner-padding '(4 . 10))
 
 (use-package! expand-region
   :commands (er/contract-region er/mark-symbol er/mark-word)
