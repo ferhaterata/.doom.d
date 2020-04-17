@@ -225,9 +225,4 @@
 (setq org-latex-pdf-process
   '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f"))
 
-(use-package! org-ref
-  :after org
-  :init
-  :config
-)
 ;; -----------------------------------------------------------------------------
